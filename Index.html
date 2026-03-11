@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>بطاقة تهنئة</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
+<style>
+
+body{
+margin:0;
+font-family:'Tajawal', sans-serif;
+background:#0b1440;
+display:flex;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+padding:20px;
+}
+
+h2{
+color:white;
+}
+
+input,select{
+padding:12px;
+border-radius:10px;
+border:none;
+font-size:16px;
+margin:8px;
+text-align:center;
+width:220px;
+}
+
+button{
+padding:10px 20px;
+border:none;
+border-radius:10px;
+background:#c9a86a;
+color:white;
+font-size:16px;
+cursor:pointer;
+margin:5px;
+}
+
+.card{
+
+width:350px;
+height:620px;
+
+background-size:cover;
+background-position:center;
+
+position:relative;
+
+border-radius:15px;
+
+box-shadow:0 0 25px rgba(0,0,0,0.5);
+
+display:none;
+margin-top:20px;
+
+}
+
+.name{
+
+position:absolute;
+bottom:25px;
+width:100%;
+text-align:center;
+font-size:30px;
+color:white;
+font-weight:bold;
+text-shadow:0 0 10px rgba(0,0,0,0.7);
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h2>بطاقة تهنئة</h2>
+
+<input type="text" id="name" placeholder="اكتب اسمك">
+
+<select id="cardSelect">
+<option value="eid.png">التصميم الأول</option>
+<option value="eid2.png">التصميم الثاني</option>
+</select>
+
+<br>
+
+<button onclick="showCard()">عرض البطاقة</button>
+
+<button onclick="downloadCard()" id="downloadBtn" style="display:none;">
+تحميل البطاقة
+</button>
+
+<div class="card" id="card">
+<div class="name" id="result"></div>
+</div>
+
+<script>
+
+function showCard(){
+
+var name=document.getElementById("name").value;
+
+if(name===""){
+alert("اكتب الاسم");
+return;
+}
+
+var selectedCard=document.getElementById("cardSelect").value;
+
+var card=document.getElementById("card");
+
+card.style.backgroundImage="url('"+selectedCard+"')";
+
+document.getElementById("result").innerText=name;
+
+card.style.display="block";
+
+document.getElementById("downloadBtn").style.display="inline-block";
+
+}
+
+function downloadCard(){
+
+html2canvas(document.getElementById("card")).then(function(canvas){
+
+var link=document.createElement("a");
+
+link.download="eid-card.png";
+
+link.href=canvas.toDataURL();
+
+link.click();
+
+});
+
+}
+
+</script>
+
+</body>
+</html>
