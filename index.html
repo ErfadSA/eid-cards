@@ -3,50 +3,62 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>هنئ أحبابك بعيد الفطر ببطاقة خاصة باسمك مع إرفاد</title>
+
+<title>هنّئ أحبابك بعيد الفطر باسمك مع إرفاد</title>
 
 <style>
 
 body{
-font-family:sans-serif;
+font-family:Arial, sans-serif;
 background:#0b1d4a;
 color:white;
 text-align:center;
-padding:15px;
+padding:20px;
 }
 
-input{
-padding:10px;
-font-size:18px;
+h2{
+margin-bottom:20px;
+}
+
+input, select{
+padding:12px;
+font-size:16px;
 border-radius:10px;
 border:none;
-margin:15px;
+margin:10px;
+text-align:center;
 }
 
-.cards{
-display:flex;
-gap:20px;
-justify-content:center;
-flex-wrap:wrap;
+button{
+padding:10px 20px;
+font-size:16px;
+border:none;
+border-radius:10px;
+background:#d4af37;
+color:white;
+margin:10px;
+cursor:pointer;
 }
 
 .card{
 position:relative;
-width:260px;
-cursor:pointer;
+width:90%;
+max-width:400px;
+margin:30px auto;
+display:none;
 }
 
 .card img{
 width:100%;
-border-radius:15px;
+border-radius:20px;
 }
 
 .name{
 position:absolute;
-bottom:22%; /* رفع الاسم قليلاً */
+bottom:30%;   /* رفع الاسم عن الأسفل */
 width:100%;
 text-align:center;
-font-size:26px;
+font-size:30px;
 font-weight:bold;
 }
 
@@ -55,26 +67,32 @@ font-weight:bold;
 
 <body>
 
-<h2>اكتب اسمك ثم اختر البطاقة</h2>
+<h2>هنّئ أحبابك بعيد الفطر باسمك مع إرفاد</h2>
 
-<input id="name" placeholder="اكتب الاسم">
+<input id="name" placeholder="اكتب اسمك">
 
-<div class="cards">
-<div class="card" onclick="showCard(1)">
-<img src="eid.png">
-<div class="name" id="name1"></div>
-</div>
+<br>
 
-<div class="card" onclick="showCard(2)">
-<img src="eid2.png">
-<div class="name" id="name2"></div>
-</div>
+<select id="cardSelect">
+<option value="eid.png">تصميم قماشي</option>
+<option value="eid2.png">تصميم رسمي</option>
+</select>
+
+<br>
+
+<button onclick="showCard()">عرض البطاقة</button>
+
+<div class="card" id="card">
+
+<img id="cardImg">
+
+<div class="name" id="cardName"></div>
 
 </div>
 
 <script>
 
-function showCard(num){
+function showCard(){
 
 let name=document.getElementById("name").value;
 
@@ -83,15 +101,23 @@ alert("اكتب الاسم أولاً");
 return;
 }
 
-if(num==1){
-document.getElementById("name1").innerText=name;
-document.getElementById("name1").style.color="#0b1d4a"; // كحلي
+let selected=document.getElementById("cardSelect").value;
+
+document.getElementById("cardImg").src=selected;
+
+let cardName=document.getElementById("cardName");
+
+cardName.innerText=name;
+
+/* اللون حسب التصميم */
+
+if(selected=="eid.png"){
+cardName.style.color="#0b1d4a";   // كحلي للتصميم القماشي
+}else{
+cardName.style.color="white";     // للتصميم الرسمي
 }
 
-if(num==2){
-document.getElementById("name2").innerText=name;
-document.getElementById("name2").style.color="white";
-}
+document.getElementById("card").style.display="block";
 
 }
 
