@@ -127,10 +127,12 @@ let cardName=document.getElementById("cardName");
 
 cardName.innerText=name;
 
-if(selected==="eid.PNG"){
-cardName.style.color="#0b1d4a";
+if(selected==="eid.png"){
+ctx.fillStyle="#0b1d4a";
+ctx.font="45px montaser";   // تصغير الخط للتصميم القماشي
 }else{
-cardName.style.color="white";
+ctx.fillStyle="white";
+ctx.font="60px montaser";   // حجم الخط للتصميم الرسمي
 }
 
 document.getElementById("card").style.display="block";
