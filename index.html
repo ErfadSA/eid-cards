@@ -4,15 +4,10 @@
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<img src="logo.png" class="logo">
 
 <title>هنّئ أحبابك بعيد الفطر باسمك مع إرفاد</title>
 
 <style>
-.logo{
-width:120px;
-margin-bottom:15px;
-}
 
 @font-face{
 font-family: montaser;
@@ -27,13 +22,14 @@ text-align:center;
 padding:20px;
 }
 
-h2{
-margin-bottom:25px;
+.logo{
+width:120px;
+margin-bottom:10px;
 }
 
 input,select{
 padding:12px;
-font-size:14px;
+font-size:16px;
 border-radius:10px;
 border:none;
 margin:10px;
@@ -72,7 +68,7 @@ position:absolute;
 bottom:15%;
 width:100%;
 text-align:center;
-font-size:12px;
+font-size:22px;
 font-weight:bold;
 }
 
@@ -81,6 +77,8 @@ font-weight:bold;
 </head>
 
 <body>
+
+<img src="logo.png" class="logo">
 
 <h2>هنّئ أحبابك بعيد الفطر باسمك مع إرفاد</h2>
 
@@ -127,17 +125,18 @@ let cardName=document.getElementById("cardName");
 
 cardName.innerText=name;
 
-if(selected==="eid.png"){
-ctx.fillStyle="#0b1d4a";
-ctx.font="45px montaser";
+if(selected==="eid.PNG"){
+cardName.style.color="#0b1d4a";
+cardName.style.fontSize="20px";
 }else{
-ctx.fillStyle="white";
-ctx.font="60px montaser"; 
+cardName.style.color="white";
+cardName.style.fontSize="24px";
 }
 
 document.getElementById("card").style.display="block";
 
 }
+
 
 function downloadCard(){
 
@@ -165,13 +164,17 @@ let ctx=canvas.getContext("2d");
 
 ctx.drawImage(img,0,0);
 
+if(selected==="eid.PNG"){
+ctx.font="45px montaser";
+ctx.fillStyle="#0b1d4a";
+}else{
 ctx.font="60px montaser";
-https://erfadsa.github.io/eid-cards/
+ctx.fillStyle="white";
+}
 
 ctx.textAlign="center";
 
-ctx.fillText(name,canvas.width/2,canvas.height*0.74);
-
+ctx.fillText(name,canvas.width/2,canvas.height*0.72);
 
 let link=document.createElement("a");
 
