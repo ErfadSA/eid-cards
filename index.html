@@ -193,14 +193,14 @@
         ctx.textAlign = "center";
         ctx.direction = "rtl";
 
-        if(selected === "./eid.PNG"){
-          ctx.fillStyle = "#0b1d4a";
-          ctx.font = "48px montaser";
-          ctx.fillText(name, canvas.width / 2, canvas.height * 0.88);
-        }else{
+        if(selected === "./eid2.png"){
           ctx.fillStyle = "white";
+          ctx.font = "50px montaser";
+          ctx.fillText(name, canvas.width / 2, canvas.height * 0.90);
+        }else{
+          ctx.fillStyle = "#0b1d4a";
           ctx.font = "46px montaser";
-          ctx.fillText(name, canvas.width / 2, canvas.height * 0.88);
+          ctx.fillText(name, canvas.width / 2, canvas.height * 0.90);
         }
 
         const link = document.createElement("a");
