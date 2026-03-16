@@ -56,7 +56,7 @@
       font-size:14px;
       border:none;
       border-radius:14px;
-      background:#green;
+      background:#148B5E;
       color:white;
       margin:8px;
       cursor:pointer;
@@ -106,8 +106,8 @@
   <input id="name" type="text" placeholder="اكتب اسمك">
 
   <select id="cardSelect">
-    <option value="./eid.PNG">تصميم قماشي</option>
     <option value="./eid2.png">تصميم رسمي</option>
+    <option value="./eid.PNG">تصميم قماشي</option>
     <option value="./eid3.png">أبيض</option>
     <option value="./eid4.png">أخضر</option>
   </select>
@@ -129,11 +129,11 @@
       if(selected === "./eid2.png"){
         cardName.style.color = "white";
         cardName.style.fontSize = "22px";
-        cardName.style.bottom = "15%";
+        cardName.style.bottom = "18%";
       }else{
         cardName.style.color = "#0b1d4a";
         cardName.style.fontSize = "20px";
-        cardName.style.bottom = "15%";
+        cardName.style.bottom = "18%";
       }
     }
 
@@ -195,12 +195,12 @@
 
         if(selected === "./eid2.png"){
           ctx.fillStyle = "white";
-          ctx.font = "50px montaser";
-          ctx.fillText(name, canvas.width / 2, canvas.height * 0.90);
+          ctx.font = "80px montaser";
+          ctx.fillText(name, canvas.width / 2, canvas.height * 0.75);
         }else{
           ctx.fillStyle = "#0b1d4a";
           ctx.font = "46px montaser";
-          ctx.fillText(name, canvas.width / 2, canvas.height * 0.90);
+          ctx.fillText(name, canvas.width / 2, canvas.height * 0.75);
         }
 
         const link = document.createElement("a");
