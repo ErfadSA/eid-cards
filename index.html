@@ -128,12 +128,12 @@
 
       if(selected === "./eid2.png"){
         cardName.style.color = "white";
-        cardName.style.fontSize = "18px";
+        cardName.style.fontSize = "16px";
         cardName.style.bottom = "18%";
       }else{
         cardName.style.color = "#0b1d4a";
         cardName.style.fontSize = "18px";
-        cardName.style.bottom = "17%";
+        cardName.style.bottom = "17.5%";
       }
     }
 
@@ -158,11 +158,7 @@
       img.onload = function(){
         card.style.display = "block";
         note.textContent = "";
-      };
-
-      img.onerror = function(){
-        card.style.display = "none";
-        note.textContent = "الصورة لم تُحمّل. تأكدي من اسم الملف وحدثي الموقع ثم انتظري دقيقة.";
+      
       };
 
       img.src = selected + "?v=" + new Date().getTime();
@@ -196,7 +192,7 @@
         if(selected === "./eid2.png"){
           ctx.fillStyle = "white";
           ctx.font = "80px montaser";
-          ctx.fillText(name, canvas.width / 2, canvas.height * 0.75);
+          ctx.fillText(name, canvas.width / 2, canvas.height * 0.80);
         }else{
           ctx.fillStyle = "#0b1d4a";
           ctx.font = "46px montaser";
@@ -209,9 +205,7 @@
         link.click();
       };
 
-      img.onerror = function(){
-        alert("تعذر تحميل صورة البطاقة. تأكدي أن الملفات مرفوعة على GitHub Pages بشكل صحيح.");
-      };
+  
     }
   </script>
 
