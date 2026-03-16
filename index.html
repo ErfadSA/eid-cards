@@ -1,79 +1,74 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>هنّئ أحبابك بعيد الفطر باسمك مع إرفاد</title>
 
 <style>
-
 @font-face{
-font-family: montaser;
-src: url("montaser.ttf");
+  font-family: montaser;
+  src: url("montaser.ttf");
 }
 
 body{
-font-family: montaser;
-background:#0b1d4a;
-color:white;
-text-align:center;
-padding:20px;
+  font-family: montaser;
+  background:#0b1d4a;
+  color:white;
+  text-align:center;
+  padding:20px;
 }
 
 .logo{
-width:120px;
-margin-bottom:10px;
+  width:120px;
+  margin-bottom:10px;
 }
 
 input,select{
-padding:12px;
-font-size:16px;
-border-radius:10px;
-border:none;
-margin:10px;
-width:230px;
-text-align:center;
-font-family:montaser;
+  padding:12px;
+  font-size:16px;
+  border-radius:10px;
+  border:none;
+  margin:10px;
+  width:230px;
+  text-align:center;
+  font-family:montaser;
 }
 
 button{
-padding:12px 22px;
-font-size:16px;
-border:none;
-border-radius:10px;
-background:#d4af37;
-color:white;
-margin:10px;
-cursor:pointer;
-font-family:montaser;
+  padding:12px 22px;
+  font-size:16px;
+  border:none;
+  border-radius:10px;
+  background:#d4af37;
+  color:white;
+  margin:10px;
+  cursor:pointer;
+  font-family:montaser;
 }
 
 .card{
-position:relative;
-width:90%;
-max-width:420px;
-margin:35px auto;
-display:none;
+  position:relative;
+  width:90%;
+  max-width:420px;
+  margin:35px auto;
+  display:none;
 }
 
 .card img{
-width:100%;
-border-radius:20px;
-display:block;
+  width:100%;
+  border-radius:20px;
+  display:block;
 }
 
 .name{
-position:absolute;
-width:100%;
-text-align:center;
-font-weight:bold;
-left:0;
+  position:absolute;
+  width:100%;
+  text-align:center;
+  font-weight:bold;
+  left:0;
 }
-
 </style>
-
 </head>
 
 <body>
@@ -83,14 +78,13 @@ left:0;
 <h2>هنّئ أحبابك بعيد الفطر باسمك مع إرفاد</h2>
 
 <input id="name" placeholder="اكتب اسمك">
-
 <br>
 
 <select id="cardSelect">
-<option value="eid.PNG">تصميم قماشي</option>
-<option value="eid2.png">تصميم رسمي</option>
-<option value="eid3.png">أبيض</option>
-<option value="eid4.png">أخضر</option>
+  <option value="eid.PNG">تصميم قماشي</option>
+  <option value="eid2.png">تصميم رسمي</option>
+  <option value="eid3.png">أبيض</option>
+  <option value="eid4.png">أخضر</option>
 </select>
 
 <br>
@@ -99,139 +93,49 @@ left:0;
 <button onclick="downloadCard()">تحميل البطاقة</button>
 
 <div class="card" id="card">
-<img id="cardImg" src="">
-<div class="name" id="cardName"></div>
+  <img id="cardImg" src="" alt="بطاقة التهنئة">
+  <div class="name" id="cardName"></div>
 </div>
 
 <script>
-
 function getCardSettings(selected){
-
-if(selected==="eid.PNG"){
-return {
-previewBottom:"19%",
-previewFont:"14px",
-previewColor:"#0b1d4a",
-canvasFont:42,
-canvasColor:"#0b1d4a",
-canvasY:0.81
-};
-}
-
-else if(selected==="eid2.png"){
-return {
-previewBottom:"19%",
-previewFont:"14px",
-previewColor:"white",
-canvasFont:42,
-canvasColor:"white",
-canvasY:0.81
-};
-}
-
-else if(selected==="eid3.png"){
-return {
-previewBottom:"19%",
-previewFont:"14px",
-previewColor:"#444",
-canvasFont:42,
-canvasColor:"#444",
-canvasY:0.81
-};
-}
-
-else if(selected==="eid4.png"){
-return {
-previewBottom:"19%",
-previewFont:"14px",
-previewColor":"white",
-canvasFont:42,
-canvasColor:"white",
-canvasY:0.81
-};
-}
-
-else{
-return {
-previewBottom:"19%",
-previewFont:"14px",
-previewColor":"white",
-canvasFont:42,
-canvasColor:"white",
-canvasY:0.81
-};
-}
-
-}
-
-function showCard(){
-
-let name=document.getElementById("name").value.trim();
-
-if(name===""){
-alert("اكتب الاسم أولاً");
-return;
-}
-
-let selected=document.getElementById("cardSelect").value;
-let settings=getCardSettings(selected);
-
-let img=document.getElementById("cardImg");
-img.src=selected;
-
-let cardName=document.getElementById("cardName");
-cardName.innerText=name;
-cardName.style.color=settings.previewColor;
-cardName.style.fontSize=settings.previewFont;
-cardName.style.bottom=settings.previewBottom;
-
-document.getElementById("card").style.display="block";
-
-}
-
-function downloadCard(){
-
-let name=document.getElementById("name").value.trim();
-
-if(name===""){
-alert("اكتب الاسم أولاً");
-return;
-}
-
-let selected=document.getElementById("cardSelect").value;
-let settings=getCardSettings(selected);
-
-let canvas=document.createElement("canvas");
-let img=new Image();
-
-img.onload=function(){
-
-canvas.width=img.width;
-canvas.height=img.height;
-
-let ctx=canvas.getContext("2d");
-
-ctx.drawImage(img,0,0);
-
-ctx.font=settings.canvasFont + "px montaser";
-ctx.fillStyle=settings.canvasColor;
-ctx.textAlign="center";
-ctx.textBaseline="middle";
-
-ctx.fillText(name,canvas.width/2,canvas.height*settings.canvasY);
-
-let link=document.createElement("a");
-link.download="eid-card.png";
-link.href=canvas.toDataURL("image/png");
-link.click();
-
-};
-
-img.src=selected;
-
-}
-
-</script>
-
-</body>
-</html>
+  if(selected === "eid.PNG"){
+    return {
+      previewBottom: "19%",
+      previewFont: "14px",
+      previewColor: "#0b1d4a",
+      canvasFont: 42,
+      canvasColor: "#0b1d4a",
+      canvasY: 0.81
+    };
+  }else if(selected === "eid2.png"){
+    return {
+      previewBottom: "19%",
+      previewFont: "14px",
+      previewColor: "white",
+      canvasFont: 42,
+      canvasColor: "white",
+      canvasY: 0.81
+    };
+  }else if(selected === "eid3.png"){
+    return {
+      previewBottom: "19%",
+      previewFont: "14px",
+      previewColor: "#444",
+      canvasFont: 42,
+      canvasColor: "#444",
+      canvasY: 0.81
+    };
+  }else if(selected === "eid4.png"){
+    return {
+      previewBottom: "19%",
+      previewFont: "14px",
+      previewColor: "white",
+      canvasFont: 42,
+      canvasColor: "white",
+      canvasY: 0.81
+    };
+  }else{
+    return {
+      previewBottom: "19%",
+      previewFont
