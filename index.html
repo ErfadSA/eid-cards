@@ -61,15 +61,15 @@ display:none;
 .card img{
 width:100%;
 border-radius:20px;
+display:block;
 }
 
 .name{
 position:absolute;
-bottom:15%;
 width:100%;
 text-align:center;
-font-size:14px;
 font-weight:bold;
+left:0;
 }
 
 </style>
@@ -78,7 +78,7 @@ font-weight:bold;
 
 <body>
 
-<img src="logo.png" class="logo">
+<img src="logo.png" class="logo" onerror="this.style.display='none'">
 
 <h2>هنّئ أحبابك بعيد الفطر باسمك مع إرفاد</h2>
 
@@ -89,6 +89,8 @@ font-weight:bold;
 <select id="cardSelect">
 <option value="eid.PNG">تصميم قماشي</option>
 <option value="eid2.png">تصميم رسمي</option>
+<option value="eid3.png">أبيض</option>
+<option value="eid4.png">أخضر</option>
 </select>
 
 <br>
@@ -97,14 +99,70 @@ font-weight:bold;
 <button onclick="downloadCard()">تحميل البطاقة</button>
 
 <div class="card" id="card">
-
-<img id="cardImg">
-
+<img id="cardImg" src="">
 <div class="name" id="cardName"></div>
-
 </div>
 
 <script>
+
+function getCardSettings(selected){
+
+if(selected==="eid.PNG"){
+return {
+previewBottom:"19%",
+previewFont:"14px",
+previewColor:"#0b1d4a",
+canvasFont:42,
+canvasColor:"#0b1d4a",
+canvasY:0.81
+};
+}
+
+else if(selected==="eid2.png"){
+return {
+previewBottom:"19%",
+previewFont:"14px",
+previewColor:"white",
+canvasFont:42,
+canvasColor:"white",
+canvasY:0.81
+};
+}
+
+else if(selected==="eid3.png"){
+return {
+previewBottom:"19%",
+previewFont:"14px",
+previewColor:"#444",
+canvasFont:42,
+canvasColor:"#444",
+canvasY:0.81
+};
+}
+
+else if(selected==="eid4.png"){
+return {
+previewBottom:"19%",
+previewFont:"14px",
+previewColor":"white",
+canvasFont:42,
+canvasColor:"white",
+canvasY:0.81
+};
+}
+
+else{
+return {
+previewBottom:"19%",
+previewFont:"14px",
+previewColor":"white",
+canvasFont:42,
+canvasColor:"white",
+canvasY:0.81
+};
+}
+
+}
 
 function showCard(){
 
@@ -116,27 +174,20 @@ return;
 }
 
 let selected=document.getElementById("cardSelect").value;
+let settings=getCardSettings(selected);
 
 let img=document.getElementById("cardImg");
-
 img.src=selected;
 
 let cardName=document.getElementById("cardName");
-
 cardName.innerText=name;
-
-if(selected==="eid.PNG"){
-cardName.style.color="#0b1d4a";
-cardName.style.fontSize="14px";
-}else{
-cardName.style.color="white";
-cardName.style.fontSize="14px";
-}
+cardName.style.color=settings.previewColor;
+cardName.style.fontSize=settings.previewFont;
+cardName.style.bottom=settings.previewBottom;
 
 document.getElementById("card").style.display="block";
 
 }
-
 
 function downloadCard(){
 
@@ -148,12 +199,10 @@ return;
 }
 
 let selected=document.getElementById("cardSelect").value;
+let settings=getCardSettings(selected);
 
 let canvas=document.createElement("canvas");
-
 let img=new Image();
-
-img.src=selected;
 
 img.onload=function(){
 
@@ -164,27 +213,21 @@ let ctx=canvas.getContext("2d");
 
 ctx.drawImage(img,0,0);
 
-if(selected==="eid.PNG"){
-ctx.font="45px montaser";
-ctx.fillStyle="#0b1d4a";
-}else{
-ctx.font="90px montaser";
-ctx.fillStyle="white";
-}
-
+ctx.font=settings.canvasFont + "px montaser";
+ctx.fillStyle=settings.canvasColor;
 ctx.textAlign="center";
+ctx.textBaseline="middle";
 
-ctx.fillText(name,canvas.width/2,canvas.height*0.79);
+ctx.fillText(name,canvas.width/2,canvas.height*settings.canvasY);
 
 let link=document.createElement("a");
-
 link.download="eid-card.png";
-
-link.href=canvas.toDataURL();
-
+link.href=canvas.toDataURL("image/png");
 link.click();
 
-}
+};
+
+img.src=selected;
 
 }
 
