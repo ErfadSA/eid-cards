@@ -11,7 +11,9 @@
       src: url("./montaser.ttf") format("truetype");
     }
 
-    *{ box-sizing:border-box; }
+    *{
+      box-sizing:border-box;
+    }
 
     body{
       margin:0;
@@ -45,8 +47,8 @@
       width:260px;
       max-width:90%;
       text-align:center;
+      font-family:"montaser", sans-serif;
       display:block;
-      font-family:"montaser";
     }
 
     button{
@@ -58,10 +60,10 @@
       color:white;
       margin:8px;
       cursor:pointer;
-      font-family:"montaser";
+      font-family:"montaser", sans-serif;
     }
 
-    /* ===== السلايدر ===== */
+    /* السلايدر */
     .slider{
       display:flex;
       overflow-x:auto;
@@ -79,7 +81,7 @@
       flex:0 0 70%;
       margin:0 5%;
       scroll-snap-align:center;
-      transition:transform 0.35s ease, opacity 0.3s;
+      transition:transform 0.3s ease, opacity 0.3s;
       opacity:0.5;
       position:relative;
     }
@@ -94,17 +96,18 @@
       opacity:1;
     }
 
-    /* الاسم داخل السلايدر */
-    .slide-name{
+    /* نفس كلاس الاسم الأصلي بدون تغيير */
+    .name{
       position:absolute;
       left:50%;
       transform:translateX(-50%);
-      bottom:18%;
       width:80%;
       text-align:center;
-      font-size:14px;
-      color:white;
+      font-weight:normal;
+      line-height:1.3;
+      word-break:break-word;
       pointer-events:none;
+      bottom:18%;
     }
 
     .note{
@@ -117,7 +120,7 @@
 </head>
 <body>
 
-  <img src="./logo.png" class="logo">
+  <img src="./logo.png" class="logo" alt="شعار إرفاد">
 
   <h2>هنّئ أحبابك بعيد الفطر باسمك مع إرفاد</h2>
 
@@ -125,25 +128,27 @@
 
   <!-- السلايدر -->
   <div class="slider" id="slider">
+
     <div class="slide" data-img="./eid2.png">
       <img src="./eid2.png">
-      <div class="slide-name"></div>
+      <div class="name slide-live-name"></div>
     </div>
 
     <div class="slide" data-img="./eid.PNG">
       <img src="./eid.PNG">
-      <div class="slide-name"></div>
+      <div class="name slide-live-name"></div>
     </div>
 
     <div class="slide" data-img="./eid3.png">
       <img src="./eid3.png">
-      <div class="slide-name"></div>
+      <div class="name slide-live-name"></div>
     </div>
 
     <div class="slide" data-img="./eid4.png">
       <img src="./eid4.png">
-      <div class="slide-name"></div>
+      <div class="name slide-live-name"></div>
     </div>
+
   </div>
 
   <button onclick="downloadCard()">تحميل البطاقة</button>
@@ -155,7 +160,7 @@ const slider = document.getElementById("slider");
 const slides = document.querySelectorAll(".slide");
 const nameInput = document.getElementById("name");
 
-/* تحديد العنصر الأوسط بدون اهتزاز */
+/* إزالة الاهتزاز */
 function getSelectedImage(){
   let closest = 0;
   let minDistance = Infinity;
@@ -181,16 +186,16 @@ function getSelectedImage(){
 slider.addEventListener("scroll", getSelectedImage);
 window.onload = getSelectedImage;
 
-/* كتابة الاسم مباشرة على التصاميم */
+/* الاسم يظهر مباشرة */
 nameInput.addEventListener("input", () => {
-  document.querySelectorAll(".slide-name").forEach(el=>{
+  document.querySelectorAll(".slide-live-name").forEach(el=>{
     el.textContent = nameInput.value;
   });
 });
 
-/* التحميل */
+/* التحميل (نفس كودك) */
 function downloadCard(){
-  const name = nameInput.value.trim();
+  const name = document.getElementById("name").value.trim();
   const selected = getSelectedImage();
 
   if(name === ""){
@@ -209,7 +214,7 @@ function downloadCard(){
     canvas.width = img.naturalWidth;
     canvas.height = img.naturalHeight;
 
-    ctx.drawImage(img, 0, 0);
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
     ctx.textAlign = "center";
     ctx.direction = "rtl";
