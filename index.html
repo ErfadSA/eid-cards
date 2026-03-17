@@ -177,18 +177,22 @@ function updateSlides(){
   const name = nameInput.value.trim();
 
   slides.forEach((slide, i)=>{
-    const slideName = slide.querySelector(".name");
-    slideName.textContent = name;
+  const slideName = slide.querySelector(".name");
+  slideName.textContent = name;
 
-    /* كلهم نفس الارتفاع 0.81 */
+  /* رفع التصميم الثالث فقط */
+  if(i === 2){ 
+    slideName.style.bottom = "23%"; 
+  }else{
     slideName.style.bottom = "19%";
+  }
 
-    if(i === 0){
-      slideName.style.color = "white";
-    }else{
-      slideName.style.color = "#0C2464";
-    }
-  });
+  if(i === 0){
+    slideName.style.color = "white";
+  }else{
+    slideName.style.color = "#0C2464";
+  }
+});
 
   getSelectedImage();
 }
