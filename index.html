@@ -11,9 +11,7 @@
       src: url("./montaser.ttf") format("truetype");
     }
 
-    *{
-      box-sizing:border-box;
-    }
+    *{ box-sizing:border-box; }
 
     body{
       margin:0;
@@ -47,8 +45,8 @@
       width:260px;
       max-width:90%;
       text-align:center;
-      font-family:"montaser", sans-serif;
       display:block;
+      font-family:"montaser";
     }
 
     button{
@@ -60,7 +58,7 @@
       color:white;
       margin:8px;
       cursor:pointer;
-      font-family:"montaser", sans-serif;
+      font-family:"montaser";
     }
 
     /* السلايدر */
@@ -81,9 +79,8 @@
       flex:0 0 70%;
       margin:0 5%;
       scroll-snap-align:center;
-      transition:transform 0.3s ease, opacity 0.3s;
+      transition:transform 0.35s ease, opacity 0.3s;
       opacity:0.5;
-      position:relative;
     }
 
     .slide img{
@@ -96,7 +93,21 @@
       opacity:1;
     }
 
-    /* نفس كلاس الاسم الأصلي بدون تغيير */
+    /* الكرت كما هو */
+    .card{
+      position:relative;
+      width:90%;
+      max-width:420px;
+      margin:35px auto;
+      display:block;
+    }
+
+    .card img{
+      width:100%;
+      display:block;
+      border-radius:20px;
+    }
+
     .name{
       position:absolute;
       left:50%;
@@ -107,7 +118,6 @@
       line-height:1.3;
       word-break:break-word;
       pointer-events:none;
-      bottom:18%;
     }
 
     .note{
@@ -120,7 +130,7 @@
 </head>
 <body>
 
-  <img src="./logo.png" class="logo" alt="شعار إرفاد">
+  <img src="./logo.png" class="logo">
 
   <h2>هنّئ أحبابك بعيد الفطر باسمك مع إرفاد</h2>
 
@@ -128,32 +138,22 @@
 
   <!-- السلايدر -->
   <div class="slider" id="slider">
-
-    <div class="slide" data-img="./eid2.png">
-      <img src="./eid2.png">
-      <div class="name slide-live-name"></div>
-    </div>
-
-    <div class="slide" data-img="./eid.PNG">
-      <img src="./eid.PNG">
-      <div class="name slide-live-name"></div>
-    </div>
-
-    <div class="slide" data-img="./eid3.png">
-      <img src="./eid3.png">
-      <div class="name slide-live-name"></div>
-    </div>
-
-    <div class="slide" data-img="./eid4.png">
-      <img src="./eid4.png">
-      <div class="name slide-live-name"></div>
-    </div>
-
+    <div class="slide" data-img="./eid2.png"><img src="./eid2.png"></div>
+    <div class="slide" data-img="./eid.PNG"><img src="./eid.PNG"></div>
+    <div class="slide" data-img="./eid3.png"><img src="./eid3.png"></div>
+    <div class="slide" data-img="./eid4.png"><img src="./eid4.png"></div>
   </div>
 
+  <!-- زر التحميل فقط -->
   <button onclick="downloadCard()">تحميل البطاقة</button>
 
   <div class="note" id="note"></div>
+
+  <!-- الكرت كما كان -->
+  <div class="card" id="card">
+    <img id="cardImg">
+    <div class="name" id="cardName"></div>
+  </div>
 
 <script>
 const slider = document.getElementById("slider");
@@ -162,38 +162,52 @@ const nameInput = document.getElementById("name");
 
 /* إزالة الاهتزاز */
 function getSelectedImage(){
-  let closest = 0;
-  let minDistance = Infinity;
+  let center = slider.scrollLeft + (slider.offsetWidth / 2);
+  let selectedIndex = 0;
 
   slides.forEach((slide, i)=>{
     const slideCenter = slide.offsetLeft + (slide.offsetWidth / 2);
-    const sliderCenter = slider.scrollLeft + (slider.offsetWidth / 2);
-
-    const distance = Math.abs(sliderCenter - slideCenter);
-
-    if(distance < minDistance){
-      minDistance = distance;
-      closest = i;
+    slide.classList.remove("active");
+    if(Math.abs(center - slideCenter) < slide.offsetWidth / 2){
+      selectedIndex = i;
     }
   });
 
-  slides.forEach(s => s.classList.remove("active"));
-  slides[closest].classList.add("active");
-
-  return slides[closest].getAttribute("data-img");
+  slides[selectedIndex].classList.add("active");
+  return slides[selectedIndex].getAttribute("data-img");
 }
 
-slider.addEventListener("scroll", getSelectedImage);
-window.onload = getSelectedImage;
+/* تحديث الكرت أثناء السحب */
+function updateCard(){
+  const selected = getSelectedImage();
+  const img = document.getElementById("cardImg");
+  const cardName = document.getElementById("cardName");
+  const name = nameInput.value.trim();
 
-/* الاسم يظهر مباشرة */
-nameInput.addEventListener("input", () => {
-  document.querySelectorAll(".slide-live-name").forEach(el=>{
-    el.textContent = nameInput.value;
-  });
-});
+  img.src = selected + "?v=" + new Date().getTime();
+  cardName.textContent = name;
 
-/* التحميل (نفس كودك) */
+  /* الحفاظ على ألوان ومكان الاسم كما في كودك */
+  if(selected === "./eid2.png"){
+    cardName.style.color = "white";
+    cardName.style.fontSize = "14px";
+    cardName.style.bottom = "18%";
+  }else{
+    cardName.style.color = "#0C2464";
+    cardName.style.fontSize = "14px";
+    cardName.style.bottom = "18%";
+  }
+}
+
+slider.addEventListener("scroll", updateCard);
+
+/* تحديث الاسم أثناء الكتابة */
+nameInput.addEventListener("input", updateCard);
+
+/* تشغيل أول مرة */
+window.onload = updateCard;
+
+/* التحميل */
 function downloadCard(){
   const name = document.getElementById("name").value.trim();
   const selected = getSelectedImage();
@@ -214,7 +228,7 @@ function downloadCard(){
     canvas.width = img.naturalWidth;
     canvas.height = img.naturalHeight;
 
-    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    ctx.drawImage(img, 0, 0);
 
     ctx.textAlign = "center";
     ctx.direction = "rtl";
