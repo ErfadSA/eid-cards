@@ -11,9 +11,7 @@
       src: url("./montaser.ttf") format("truetype");
     }
 
-    *{
-      box-sizing:border-box;
-    }
+    *{ box-sizing:border-box; }
 
     body{
       margin:0;
@@ -38,7 +36,7 @@
       font-weight:normal;
     }
 
-    input, select{
+    input{
       padding:14px;
       font-size:14px;
       border-radius:14px;
@@ -47,8 +45,8 @@
       width:260px;
       max-width:90%;
       text-align:center;
-      font-family:"montaser", sans-serif;
       display:block;
+      font-family:"montaser";
     }
 
     button{
@@ -60,9 +58,42 @@
       color:white;
       margin:8px;
       cursor:pointer;
-      font-family:"montaser", sans-serif;
+      font-family:"montaser";
     }
 
+    /* ===== السلايدر ===== */
+    .slider{
+      display:flex;
+      overflow-x:auto;
+      scroll-snap-type:x mandatory;
+      scroll-behavior:smooth;
+      -webkit-overflow-scrolling:touch;
+      margin:20px 0;
+    }
+
+    .slider::-webkit-scrollbar{
+      display:none;
+    }
+
+    .slide{
+      flex:0 0 70%;
+      margin:0 5%;
+      scroll-snap-align:center;
+      transition:transform 0.35s ease, opacity 0.3s;
+      opacity:0.5;
+    }
+
+    .slide img{
+      width:100%;
+      border-radius:20px;
+    }
+
+    .slide.active{
+      transform:scale(1.1);
+      opacity:1;
+    }
+
+    /* ===== الكرت (ما تغير) ===== */
     .card{
       position:relative;
       width:90%;
@@ -99,18 +130,19 @@
 </head>
 <body>
 
-  <img src="./logo.png" class="logo" alt="شعار إرفاد">
+  <img src="./logo.png" class="logo">
 
   <h2>هنّئ أحبابك بعيد الفطر باسمك مع إرفاد</h2>
 
   <input id="name" type="text" placeholder="اكتب اسمك">
 
-  <select id="cardSelect">
-    <option value="./eid2.png">تصميم رسمي</option>
-    <option value="./eid.PNG">تصميم قماشي</option>
-    <option value="./eid3.png">أبيض</option>
-    <option value="./eid4.png">أخضر</option>
-  </select>
+  <!-- السلايدر -->
+  <div class="slider" id="slider">
+    <div class="slide" data-img="./eid2.png"><img src="./eid2.png"></div>
+    <div class="slide" data-img="./eid.PNG"><img src="./eid.PNG"></div>
+    <div class="slide" data-img="./eid3.png"><img src="./eid3.png"></div>
+    <div class="slide" data-img="./eid4.png"><img src="./eid4.png"></div>
+  </div>
 
   <button onclick="showCard()">عرض البطاقة</button>
   <button onclick="downloadCard()">تحميل البطاقة</button>
@@ -118,96 +150,125 @@
   <div class="note" id="note"></div>
 
   <div class="card" id="card">
-    <img id="cardImg" alt="بطاقة التهنئة">
+    <img id="cardImg">
     <div class="name" id="cardName"></div>
   </div>
 
-  <script>
-    function setNameStyle(selected){
-      const cardName = document.getElementById("cardName");
+<script>
+const slider = document.getElementById("slider");
+const slides = document.querySelectorAll(".slide");
 
-      if(selected === "./eid2.png"){
-        cardName.style.color = "white";
-        cardName.style.fontSize = "14px";
-        cardName.style.bottom = "18%";
-      }else{
-        cardName.style.color = "#0C2464";
-        cardName.style.fontSize = "14px";
-        cardName.style.bottom = "18%";
-      }
+/* تحديد العنصر الأوسط */
+function getSelectedImage(){
+  let center = slider.scrollLeft + (slider.offsetWidth / 2);
+
+  let selectedIndex = 0;
+
+  slides.forEach((slide, i)=>{
+    const slideCenter = slide.offsetLeft + (slide.offsetWidth / 2);
+
+    slide.classList.remove("active");
+
+    if(Math.abs(center - slideCenter) < slide.offsetWidth / 2){
+      selectedIndex = i;
+    }
+  });
+
+  slides[selectedIndex].classList.add("active");
+
+  return slides[selectedIndex].getAttribute("data-img");
+}
+
+/* تحديث أثناء السحب */
+slider.addEventListener("scroll", getSelectedImage);
+
+/* تشغيل أول مرة */
+window.onload = () => {
+  getSelectedImage();
+};
+
+/* نفس كودك */
+function setNameStyle(selected){
+  const cardName = document.getElementById("cardName");
+
+  if(selected === "./eid2.png"){
+    cardName.style.color = "white";
+    cardName.style.fontSize = "14px";
+    cardName.style.bottom = "18%";
+  }else{
+    cardName.style.color = "#0C2464";
+    cardName.style.fontSize = "14px";
+    cardName.style.bottom = "18%";
+  }
+}
+
+function showCard(){
+  const name = document.getElementById("name").value.trim();
+  const selected = getSelectedImage();
+  const img = document.getElementById("cardImg");
+  const card = document.getElementById("card");
+  const cardName = document.getElementById("cardName");
+  const note = document.getElementById("note");
+
+  note.textContent = "";
+
+  if(name === ""){
+    alert("اكتب الاسم أولاً");
+    return;
+  }
+
+  cardName.textContent = name;
+  setNameStyle(selected);
+
+  img.onload = function(){
+    card.style.display = "block";
+  };
+
+  img.src = selected + "?v=" + new Date().getTime();
+}
+
+function downloadCard(){
+  const name = document.getElementById("name").value.trim();
+  const selected = getSelectedImage();
+
+  if(name === ""){
+    alert("اكتب الاسم أولاً");
+    return;
+  }
+
+  const img = new Image();
+  img.crossOrigin = "anonymous";
+  img.src = selected + "?v=" + new Date().getTime();
+
+  img.onload = function(){
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+
+    canvas.width = img.naturalWidth;
+    canvas.height = img.naturalHeight;
+
+    ctx.drawImage(img, 0, 0);
+
+    ctx.textAlign = "center";
+    ctx.direction = "rtl";
+
+    if(selected === "./eid2.png"){
+      ctx.fillStyle = "white";
+      ctx.font = "80px montaser";
+      ctx.fillText(name, canvas.width / 2, canvas.height * 0.80);
+    }else{
+      ctx.fillStyle = "#0b1d4a";
+      ctx.font = "46px montaser";
+      ctx.fillText(name, canvas.width / 2, canvas.height * 0.81);
     }
 
-    function showCard(){
-      const name = document.getElementById("name").value.trim();
-      const selected = document.getElementById("cardSelect").value;
-      const img = document.getElementById("cardImg");
-      const card = document.getElementById("card");
-      const cardName = document.getElementById("cardName");
-      const note = document.getElementById("note");
-
-      note.textContent = "";
-
-      if(name === ""){
-        alert("اكتب الاسم أولاً");
-        return;
-      }
-
-      cardName.textContent = name;
-      setNameStyle(selected);
-
-      img.onload = function(){
-        card.style.display = "block";
-        note.textContent = "";
-      
-      };
-
-      img.src = selected + "?v=" + new Date().getTime();
-    }
-
-    function downloadCard(){
-      const name = document.getElementById("name").value.trim();
-      const selected = document.getElementById("cardSelect").value;
-
-      if(name === ""){
-        alert("اكتب الاسم أولاً");
-        return;
-      }
-
-      const img = new Image();
-      img.crossOrigin = "anonymous";
-      img.src = selected + "?v=" + new Date().getTime();
-
-      img.onload = function(){
-        const canvas = document.createElement("canvas");
-        const ctx = canvas.getContext("2d");
-
-        canvas.width = img.naturalWidth;
-        canvas.height = img.naturalHeight;
-
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-        ctx.textAlign = "center";
-        ctx.direction = "rtl";
-
-        if(selected === "./eid2.png"){
-          ctx.fillStyle = "white";
-          ctx.font = "80px montaser";
-          ctx.fillText(name, canvas.width / 2, canvas.height * 0.80);
-        }else{
-          ctx.fillStyle = "#0b1d4a";
-          ctx.font = "46px montaser";
-          ctx.fillText(name, canvas.width / 2, canvas.height * 0.81);
-        }
-
-        const link = document.createElement("a");
-        link.download = "eid-card.png";
-        link.href = canvas.toDataURL("image/png");
-        link.click();
-      };
-
-  
-    }
-  </script>
+    const link = document.createElement("a");
+    link.download = "eid-card.png";
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+  };
+}
+</script>
 
 </body>
 </html>
