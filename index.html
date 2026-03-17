@@ -94,7 +94,7 @@
       opacity:1;
     }
 
-    /* الاسم يظهر على كل سلايد */
+    /* الاسم على كل سلايد */
     .slide .name{
       position:absolute;
       left:50%;
@@ -105,9 +105,7 @@
       line-height:1.3;
       word-break:break-word;
       pointer-events:none;
-      bottom:18%;
       font-size:14px;
-      color:white; /* اللون الافتراضي للسلايدر */
     }
 
     .note{
@@ -117,7 +115,7 @@
       min-height:28px;
     }
 
-    /* الكرت كما هو */
+    /* الكرت */
     .card{
       position:relative;
       width:90%;
@@ -188,7 +186,7 @@ const slider = document.getElementById("slider");
 const slides = document.querySelectorAll(".slide");
 const nameInput = document.getElementById("name");
 
-/* إزالة الاهتزاز واختيار السلايد الأوسط */
+/* اختيار السلايد الأوسط بدون اهتزاز */
 function getSelectedImage(){
   let closest = 0;
   let minDistance = Infinity;
@@ -210,7 +208,7 @@ function getSelectedImage(){
   return slides[closest].getAttribute("data-img");
 }
 
-/* تحديث الاسم على السلايدز والكرت مباشرة */
+/* تحديث الاسم على السلايد والكرت */
 function updateCard(){
   const selected = getSelectedImage();
   const img = document.getElementById("cardImg");
@@ -225,15 +223,35 @@ function updateCard(){
     cardName.style.color = "white";
     cardName.style.fontSize = "14px";
     cardName.style.bottom = "18%";
-  }else{
+  }else if(selected === "./eid.PNG"){
     cardName.style.color = "#0C2464";
     cardName.style.fontSize = "14px";
-    cardName.style.bottom = "18%";
+    cardName.style.bottom = "20%"; // رفع الاسم قليلاً
+  }else if(selected === "./eid3.png"){
+    cardName.style.color = "#0C2464";
+    cardName.style.fontSize = "14px";
+    cardName.style.bottom = "22%"; // رفع الاسم لمستوى المستطيل الفارغ
+  }else if(selected === "./eid4.png"){
+    cardName.style.color = "#0C2464";
+    cardName.style.fontSize = "14px";
+    cardName.style.bottom = "22%"; // رفع الاسم لمستوى المستطيل الفارغ
   }
 
-  // تحديث كل أسماء السلايدز
-  slides.forEach(slide=>{
-    slide.querySelector(".name").textContent = name;
+  // تحديث الاسم على كل السلايدز
+  slides.forEach((slide, i)=>{
+    const slideName = slide.querySelector(".name");
+    slideName.textContent = name;
+
+    if(i === 0){ // التصميم الأول
+      slideName.style.color = "white";
+      slideName.style.bottom = "18%";
+    }else if(i === 1){ // الثاني
+      slideName.style.color = "#0C2464";
+      slideName.style.bottom = "20%";
+    }else{ // الثالث والرابع
+      slideName.style.color = "#0C2464";
+      slideName.style.bottom = "22%";
+    }
   });
 }
 
