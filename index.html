@@ -81,6 +81,7 @@
       scroll-snap-align:center;
       transition:transform 0.35s ease, opacity 0.3s;
       opacity:0.5;
+      position:relative;
     }
 
     .slide img{
@@ -91,6 +92,29 @@
     .slide.active{
       transform:scale(1.1);
       opacity:1;
+    }
+
+    /* الاسم يظهر على كل سلايد */
+    .slide .name{
+      position:absolute;
+      left:50%;
+      transform:translateX(-50%);
+      width:80%;
+      text-align:center;
+      font-weight:normal;
+      line-height:1.3;
+      word-break:break-word;
+      pointer-events:none;
+      bottom:18%;
+      font-size:14px;
+      color:white; /* اللون الافتراضي للسلايدر */
+    }
+
+    .note{
+      margin-top:10px;
+      font-size:14px;
+      color:#ffdede;
+      min-height:28px;
     }
 
     /* الكرت كما هو */
@@ -108,7 +132,7 @@
       border-radius:20px;
     }
 
-    .name{
+    .card .name{
       position:absolute;
       left:50%;
       transform:translateX(-50%);
@@ -118,13 +142,6 @@
       line-height:1.3;
       word-break:break-word;
       pointer-events:none;
-    }
-
-    .note{
-      margin-top:10px;
-      font-size:14px;
-      color:#ffdede;
-      min-height:28px;
     }
   </style>
 </head>
@@ -138,18 +155,29 @@
 
   <!-- السلايدر -->
   <div class="slider" id="slider">
-    <div class="slide" data-img="./eid2.png"><img src="./eid2.png"></div>
-    <div class="slide" data-img="./eid.PNG"><img src="./eid.PNG"></div>
-    <div class="slide" data-img="./eid3.png"><img src="./eid3.png"></div>
-    <div class="slide" data-img="./eid4.png"><img src="./eid4.png"></div>
+    <div class="slide" data-img="./eid2.png">
+      <img src="./eid2.png">
+      <div class="name"></div>
+    </div>
+    <div class="slide" data-img="./eid.PNG">
+      <img src="./eid.PNG">
+      <div class="name"></div>
+    </div>
+    <div class="slide" data-img="./eid3.png">
+      <img src="./eid3.png">
+      <div class="name"></div>
+    </div>
+    <div class="slide" data-img="./eid4.png">
+      <img src="./eid4.png">
+      <div class="name"></div>
+    </div>
   </div>
 
-  <!-- زر التحميل فقط -->
   <button onclick="downloadCard()">تحميل البطاقة</button>
 
   <div class="note" id="note"></div>
 
-  <!-- الكرت كما كان -->
+  <!-- الكرت -->
   <div class="card" id="card">
     <img id="cardImg">
     <div class="name" id="cardName"></div>
@@ -160,34 +188,39 @@ const slider = document.getElementById("slider");
 const slides = document.querySelectorAll(".slide");
 const nameInput = document.getElementById("name");
 
-/* إزالة الاهتزاز */
+/* إزالة الاهتزاز واختيار السلايد الأوسط */
 function getSelectedImage(){
-  let center = slider.scrollLeft + (slider.offsetWidth / 2);
-  let selectedIndex = 0;
+  let closest = 0;
+  let minDistance = Infinity;
 
   slides.forEach((slide, i)=>{
     const slideCenter = slide.offsetLeft + (slide.offsetWidth / 2);
-    slide.classList.remove("active");
-    if(Math.abs(center - slideCenter) < slide.offsetWidth / 2){
-      selectedIndex = i;
+    const sliderCenter = slider.scrollLeft + (slider.offsetWidth / 2);
+    const distance = Math.abs(sliderCenter - slideCenter);
+
+    if(distance < minDistance){
+      minDistance = distance;
+      closest = i;
     }
   });
 
-  slides[selectedIndex].classList.add("active");
-  return slides[selectedIndex].getAttribute("data-img");
+  slides.forEach(s => s.classList.remove("active"));
+  slides[closest].classList.add("active");
+
+  return slides[closest].getAttribute("data-img");
 }
 
-/* تحديث الكرت أثناء السحب */
+/* تحديث الاسم على السلايدز والكرت مباشرة */
 function updateCard(){
   const selected = getSelectedImage();
   const img = document.getElementById("cardImg");
   const cardName = document.getElementById("cardName");
   const name = nameInput.value.trim();
 
+  // تحديث الكرت
   img.src = selected + "?v=" + new Date().getTime();
   cardName.textContent = name;
 
-  /* الحفاظ على ألوان ومكان الاسم كما في كودك */
   if(selected === "./eid2.png"){
     cardName.style.color = "white";
     cardName.style.fontSize = "14px";
@@ -197,19 +230,20 @@ function updateCard(){
     cardName.style.fontSize = "14px";
     cardName.style.bottom = "18%";
   }
+
+  // تحديث كل أسماء السلايدز
+  slides.forEach(slide=>{
+    slide.querySelector(".name").textContent = name;
+  });
 }
 
 slider.addEventListener("scroll", updateCard);
-
-/* تحديث الاسم أثناء الكتابة */
 nameInput.addEventListener("input", updateCard);
-
-/* تشغيل أول مرة */
 window.onload = updateCard;
 
 /* التحميل */
 function downloadCard(){
-  const name = document.getElementById("name").value.trim();
+  const name = nameInput.value.trim();
   const selected = getSelectedImage();
 
   if(name === ""){
